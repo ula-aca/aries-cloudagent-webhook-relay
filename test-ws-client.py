@@ -14,15 +14,19 @@ parser = argparse.ArgumentParser(
     description="collects and cache's aca-py webhook calls until requested by controller."
     )
 
-parser.add_argument('API_KEY', help='the API key to use')
+parser.add_argument('--api-key', '-k', action='store', help='the API key to use')
 parser.add_argument('--host', '-H', action='store', default='0.0.0.0')
 parser.add_argument('--port', '-p', action='store', default=8080)
 args = parser.parse_args()
 
 URL = f'ws://{args.host}:{args.port}/ws'
 
+
 async def main():
-    session = aiohttp.ClientSession(headers={"Authorization": args.API_KEY})
+    headers = {}
+    if args.api_key:
+        headers['Authorization'] = args.api_key
+    session = aiohttp.ClientSession(headers=headers)
     async with session.ws_connect(URL) as ws:
         async for msg in ws:
             print('Message received from server:')

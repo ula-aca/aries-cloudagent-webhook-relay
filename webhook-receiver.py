@@ -74,10 +74,17 @@ async def on_ws_connection(request):
 
     await ws.prepare(request)
     if not args.insecure_mode:
+        if request.headers.get('Authorization', None) is None:
+            logging.warning('denied connection attempt because no key was provided and app is running in secure mode.')
+            logging.warning('run this app with the --insecure-mode flag to disable this security check.')
+
+            await ws.close(code=aiohttp.WSCloseCode.PROTOCOL_ERROR)
+            return
+
         provided_key = request.headers['Authorization']
         if provided_key != args.api_key:
             logging.warning(f'denied connection attempt with invalid api key {provided_key}')
-            await ws.close()
+            await ws.close(code=aiohttp.WSCloseCode.PROTOCOL_ERROR)
             return
 
     while not ws.closed:
