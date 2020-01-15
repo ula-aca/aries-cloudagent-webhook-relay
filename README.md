@@ -1,4 +1,4 @@
-# Hyperledger Aries Cloud Agent - Webhook Receiver
+# Hyperledger Aries Cloud Agent - Webhook Relay
 
 The [Hyperledger Aries Cloud Agent - Python (ACA-Py)](https://github.com/hyperledger/aries-cloudagent-python/tree/01fc73be644439fa27ab43089353859f08517ba2) currently requires the ACA-Py controller to host several webhook endpoints in order to receive updates about the agents state as described [here](https://github.com/hyperledger/aries-cloudagent-python/blob/01fc73be644439fa27ab43089353859f08517ba2/AdminAPI.md). This introduces a problem for mobile ACA-Py controller clients since it is not possible to expose such endpoints.
 
