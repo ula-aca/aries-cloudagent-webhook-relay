@@ -95,24 +95,28 @@ async def on_ws_connection(request):
 
 @routes.post('/topic/connections/')
 async def connections_handler(request):
+    logging.debug('received connection event')
     msg = Message(Topic.CONNECTIONS, await request.json())
     await request.app.msg_queue.put(msg)
     return web.Response(status=200)
 
 @routes.post('/topic/basicmessages/')
 async def basicmessages_handler(request):
+    logging.debug('received basic-message event')
     msg = Message(Topic.BASICMESSAGES, await request.json())
     await request.app.msg_queue.put(msg)
     return web.Response(status=200)
 
 @routes.post('/topic/issue_credential/')
 async def issue_credential_handler(request):
+  logging.debug('received issue-credential event')
     msg = Message(Topic.ISSUE_CREDENTIAL, await request.json())
     await request.app.msg_queue.put(msg)
     return web.Response(status=200)
 
 @routes.post('/topic/present_proof/')
 async def present_proofs_handler(request):
+    logging.debug('received present-proof event')
     msg = Message(Topic.PRESENT_PROOF, await request.json())
     await request.app.msg_queue.put(msg)
     return web.Response(status=200)
