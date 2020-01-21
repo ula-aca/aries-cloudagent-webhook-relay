@@ -15,6 +15,6 @@ jobs:
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
           name: ula-aca/aries-cloudagent-webhook-relay/aca-whr
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
