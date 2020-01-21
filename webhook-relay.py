@@ -61,9 +61,9 @@ class Topic:
 
 
 class Message:
-    def __init__(self, topic: Topic, payload: dict):
+    def __init__(self, topic: Topic, body: dict):
         self.topic = topic
-        self.payload = payload
+        self.body = body
 
     def to_json(self) -> str:
         return json.dumps(self.__dict__)
@@ -93,6 +93,7 @@ async def on_ws_connection(request):
     while not ws.closed:
         msg = await request.app.msg_queue.get()
         await ws.send_str(msg.to_json())
+        logging.debug('message send over websocket')
 
     return ws
 
