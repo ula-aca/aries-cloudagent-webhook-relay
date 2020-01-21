@@ -1,14 +1,20 @@
 name: Publish Docker
-on: [push]
+
+on:
+  push:
+    branches:
+      - master
+
 jobs:
   publish-package:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
-      with:
-        name: utrecht-innovation/aries-cloudagent-webhook-receiver/aca-whr
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        registry: docker.pkg.github.com
+      - uses: actions/checkout@master
+
+      - name: Publish to Docker Registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: ula-aca/aries-cloudagent-webhook-relay/aca-whr
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          registry: docker.pkg.github.com
