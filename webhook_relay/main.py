@@ -19,6 +19,7 @@ def setup_cli_args():
       prog='webhook-receiver',
       description="collects and cache's aca-py webhook calls until requested by controller."
   )
+  
   parser.add_argument(
       '-l', '--log',
       action='store',
