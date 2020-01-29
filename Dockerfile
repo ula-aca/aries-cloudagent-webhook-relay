@@ -1,10 +1,10 @@
 FROM python:3.7
 
-COPY ./requirements.txt .
-RUN pip install -r ./requirements.txt
+COPY . app
 
-COPY ./webhook-receiver.py .
+RUN PYTHONPATH=${PYTHONPATH}:/usr/local/lib/python3.6/site-packages
+RUN cd app && pip install .
 
 EXPOSE 8080
-
-ENTRYPOINT ["python", "-u", "./webhook-receiver.py"]
+ENTRYPOINT [ "webhook-relay" ]
+CMD [] 

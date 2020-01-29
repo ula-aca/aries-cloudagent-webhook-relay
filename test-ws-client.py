@@ -3,6 +3,7 @@
 # This executable can be used to test the websocket connection of a 
 # aca-py message processor instance. 
 
+import json
 import asyncio
 import os
 
@@ -28,6 +29,10 @@ async def main():
         headers['Authorization'] = args.api_key
     session = aiohttp.ClientSession(headers=headers)
     async with session.ws_connect(URL) as ws:
+        await ws.send_json(json.dumps({
+          'auth': args.api_key,
+          'fastForward': False
+        }))
         async for msg in ws:
             print('Message received from server:')
             print(msg)

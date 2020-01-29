@@ -1,0 +1,11 @@
+.gitignore
+.git
+.DS_Store
+.Dockerfile
+webhook-receiver-env
+.vscode
+.github
+NOTICE
+LICENCE
+README.md
+test-ws-client.py
