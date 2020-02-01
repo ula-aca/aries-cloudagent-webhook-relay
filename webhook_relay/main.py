@@ -53,6 +53,7 @@ def setup_cli_args():
 
 
 async def on_ws_connection(request):
+  
   ws = web.WebSocketResponse()
   await ws.prepare(request)
 
@@ -69,7 +70,7 @@ async def on_ws_connection(request):
   # if fastForward not provided, default to False
   fast_forward = False if client_headers.get('fastForward', None) is None else client_headers['fastForward']
 
-  if auth != args.api_key:
+  if auth != app.args.api_key:
     logging.warning(f'denied connection attempt with invalid api key {auth}')
     await ws.close(code=aiohttp.WSCloseCode.PROTOCOL_ERROR)
     return
@@ -79,7 +80,7 @@ async def on_ws_connection(request):
 
   while not ws.closed:
     msg = await request.app.msg_queue.get()
-    await ws.send_str(json.dumps(msg))
+    await ws.send_str(msg.to_json())
 
   return ws
 
@@ -114,6 +115,7 @@ async def present_proofs_handler(request):
 
 def main():
   args = setup_cli_args()
+  app.args = args
   logging.basicConfig(level=args.log, format='%(levelname)s - %(message)s')
   logging.info(f'log level: {args.log}')
 

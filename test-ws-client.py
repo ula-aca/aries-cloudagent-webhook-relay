@@ -29,7 +29,7 @@ async def main():
         headers['Authorization'] = args.api_key
     session = aiohttp.ClientSession(headers=headers)
     async with session.ws_connect(URL) as ws:
-        await ws.send_json(json.dumps({
+        await ws.send_str(json.dumps({
           'auth': args.api_key,
           'fastForward': False
         }))
