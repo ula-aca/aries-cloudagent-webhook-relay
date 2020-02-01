@@ -17,9 +17,9 @@ import json
 from .Topic import Topic
 
 class Message:
-  def __init__(self, topic: Topic, payload: dict):
+  def __init__(self, topic: Topic, body: dict):
     self.topic = topic
-    self.payload = payload
+    self.body = body
 
   def to_json(self) -> str:
     return json.dumps(self.__dict__)
