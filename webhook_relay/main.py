@@ -58,7 +58,7 @@ async def on_ws_connection(request):
 
   # this is a workaround since client side ws api's
   # to not all provide decent header interfaces.
-  client_headers = json.loads(await ws.receive_json())
+  client_headers = await ws.receive_json()
 
   auth = client_headers.get('auth', None)
   if auth is None:
@@ -79,8 +79,7 @@ async def on_ws_connection(request):
 
   while not ws.closed:
     msg = await request.app.msg_queue.get()
-    ws.receive_json
-    await ws.send_str(msg.to_json())
+    await ws.send_str(json.dumps(msg))
 
   return ws
 
