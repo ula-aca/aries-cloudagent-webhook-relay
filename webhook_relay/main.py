@@ -87,6 +87,8 @@ async def on_ws_connection(request):
 @routes.post('/topic/connections/')
 async def connections_handler(request):
   logging.debug('received connection event')
+  json_string = json.dumps(await request.json())
+  logging.info(f'data: \n {json_string}' )
   msg = Message(Topic.CONNECTIONS, await request.json())
   await request.app.msg_queue.put(msg)
   return web.Response(status=200)
@@ -94,6 +96,8 @@ async def connections_handler(request):
 @routes.post('/topic/basicmessages/')
 async def basicmessages_handler(request):
   logging.debug('received basic-message event')
+  json_string = json.dumps(await request.json())
+  logging.info(f'data: \n {json_string}' )
   msg = Message(Topic.BASICMESSAGES, await request.json())
   await request.app.msg_queue.put(msg)
   return web.Response(status=200)
@@ -101,6 +105,8 @@ async def basicmessages_handler(request):
 @routes.post('/topic/issue_credential/')
 async def issue_credential_handler(request):
   logging.debug('received issue-credential event')
+  json_string = json.dumps(await request.json())
+  logging.info(f'data: \n {json_string}' )
   msg = Message(Topic.ISSUE_CREDENTIAL, await request.json())
   await request.app.msg_queue.put(msg)
   return web.Response(status=200)
@@ -108,6 +114,8 @@ async def issue_credential_handler(request):
 @routes.post('/topic/present_proof/')
 async def present_proofs_handler(request):
   logging.debug('received present-proof event')
+  json_string = json.dumps(await request.json())
+  logging.info(f'data: \n {json_string}' )
   msg = Message(Topic.PRESENT_PROOF, await request.json())
   await request.app.msg_queue.put(msg)
   return web.Response(status=200)
