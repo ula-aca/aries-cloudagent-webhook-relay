@@ -2,10 +2,7 @@
 
 The [Hyperledger Aries Cloud Agent - Python (ACA-Py)](https://github.com/hyperledger/aries-cloudagent-python) currently requires the ACA-Py controller to host several webhook endpoints in order to receive updates about the agents state as described [here](https://github.com/hyperledger/aries-cloudagent-python/blob/01fc73be644439fa27ab43089353859f08517ba2/AdminAPI.md). This introduces a problem for mobile ACA-Py controller clients since it is not possible to expose such endpoints.
 
-This repository aims to solve this problem 'the dirty way' by placing another component (called Webhook Relay) in between ACA-Py and the Controller. The Webhook Relay exposes the required webhook endpoints and records the requests made by ACA-Py. It also exposes an endpoint and websocket interface to get the recorded messages that the Controller call to process the messages.
-
-> **A note about the websocket**  
-> Whenever a client opens a websocket connection, **all** in-memory messages that the client has missed so far will be send to the client in the order they came in. In the future a CLI flag to make this optional will be introduced. All new messages will be forwarded directly as long as the websocket connection lives. Whenever the connection is broken we'll start writing into memory again until the next time the client connects.
+This repository aims to solve this problem 'the dirty way' by placing another component (called webhook-relay) in between ACA-Py and the controller. The webhook-relay exposes the required webhook endpoints and stores the webhook requests made by ACA-Py in an in-memory FIFO queue. The controller can then fetch the messages either by polling, or by connecting to the websocket interface. All messages are stored in memory. Once a message has been picked up by the controller (regardless if it's by polling or websocket) the message is removed from memory and will no longer be available.
 
 ## Setup
 
@@ -35,7 +32,6 @@ pip install -r requirements.txt
 ```
 
 ## Usage
-
 ```
 usage: webhook-relay [-h] [-l {CRITICAL,ERROR,WARNING,INFO,DEBUG}]
                         [--api-key API_KEY] [--insecure-mode] [--host HOST]
@@ -55,6 +51,7 @@ optional arguments:
   --port PORT, -p PORT  the port the relay will run on
 ```
 
+### Connecting ACA-py to the webhook-relay
 When you run the `webhook-relay`, it will print the following message:
 
 ```bash
@@ -66,4 +63,23 @@ INFO - ws exposed at: ws://0.0.0.0:8080/ws
 (Press CTRL+C to quit)
 ```
 
-Copy th printed address (in this case `http://0.0.0.0:8080`) and pass it to a ACA-Py instance as the `--webhook-url` argument. All webhook requests made by ACA-Py will now be directed towards the webhook-relay. Your Controller instance can now fetch the messages by calling `http://0.0.0.0:8080/new-messages` or subscribe to the websocket interface at `http://0.0.0.0:8080/ws`. **Please note** that both methods require the `Authorization` request header to be set to the webhook-relays API key (in this case `55c56521-df27-4284-a71b-04501cd49c5b`).
+Copy the printed address (in this case `http://0.0.0.0:8080`) and pass it to a ACA-Py instance as the `--webhook-url` argument. All webhook requests made by ACA-Py will now be directed towards the webhook-relay. 
+
+### Getting the messages
+The controller can fetch the messages in two ways:
+
+#### Polling
+It can poll the messages by periodically making a request to `http://0.0.0.0:8080/new_messages`. This will return all the messages that the webhook-received since the last polling request. When using the polling method in secure mode you a **Bearer** authorization header is required in each polling request providing the api key printed in the relay's logs. 
+
+#### Websocket
+For realtime message updates, you can subscribe to the websocket interface at `http://0.0.0.0:8080/ws`. When the controller connects to the websocket interface, the webhook-relay will wait for the controller to send an initial message to kick things off. This message should contain a stringyfied json object that looks like this:
+
+```json
+{
+  "fastForward": true, // required
+  "auth": "your api key" // only required when running in secure mode
+}
+```
+When `fastForward` is set to `true`, the webhook-relay will start streaming all the messages it has in queue until the queue is empty. After that it will forward incoming webhook requests directly to the controller as long as the connection stays open. Upon disconnect it will start queueing the incoming messages once again, until the next connection opens. This way the controller can 'update' its state in case of connection trouble and won't miss a single message. When `fastForward` is set to `false` it will simply clear the entire queue and only forward new incoming webhook requests that are made after the connection is opened.
+
+The `auth` key is only required in secure mode and should contain the api key that is printed to the logs.

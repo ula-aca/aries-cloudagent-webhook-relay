@@ -22,7 +22,7 @@ args = parser.parse_args()
 
 URL = f'ws://{args.host}:{args.port}/ws'
 
-
+print(f'Connecting to: {URL}')
 async def main():
     headers = {}
     if args.api_key:
@@ -31,7 +31,7 @@ async def main():
     async with session.ws_connect(URL) as ws:
         await ws.send_str(json.dumps({
           'auth': args.api_key,
-          'fastForward': False
+          'fastForward': True
         }))
         async for msg in ws:
             print('Message received from server:')
