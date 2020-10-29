@@ -74,7 +74,7 @@ It can poll the messages by periodically making a request to `http://0.0.0.0:808
 #### Websocket
 For realtime message updates, you can subscribe to the websocket interface at `http://0.0.0.0:8080/ws`. When the controller connects to the websocket interface, the webhook-relay will wait for the controller to send an initial message to kick things off. This message should contain a stringyfied json object that looks like this:
 
-```json
+```jsonc
 {
   "fastForward": true, // required
   "auth": "your api key" // only required when running in secure mode
