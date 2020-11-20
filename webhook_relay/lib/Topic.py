@@ -17,3 +17,4 @@ class Topic:
   BASICMESSAGES = 'basicmessages'
   ISSUE_CREDENTIAL = 'issue_credential'
   PRESENT_PROOF = 'present_proof'
+  PROBLEM_REPORT = 'problem_report'
