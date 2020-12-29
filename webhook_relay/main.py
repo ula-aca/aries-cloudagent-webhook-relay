@@ -138,7 +138,6 @@ async def present_proofs_handler(request):
   logging.debug('received oob-invitation event')
   msg = Message(Topic.OOB_INVITATION, await request.json())
   await request.app.msg_queue.put(msg)
->>>>>>> pr-002
   return web.Response(status=200)
 
 
