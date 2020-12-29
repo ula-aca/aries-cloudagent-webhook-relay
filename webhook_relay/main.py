@@ -134,6 +134,14 @@ async def problem_report_handler(request):
   return web.Response(status=200)
 
 
+@routes.post('/topic/oob_invitation/')
+async def present_proofs_handler(request):
+  logging.debug('received oob-invitation event')
+  msg = Message(Topic.OOB_INVITATION, await request.json())
+  await request.app.msg_queue.put(msg)
+  return web.Response(status=200)
+
+
 @routes.get('/new_messages')
 async def new_messages_handler(request):
   if not app.args.insecure_mode:

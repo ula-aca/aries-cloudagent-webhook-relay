@@ -18,3 +18,4 @@ class Topic:
   ISSUE_CREDENTIAL = 'issue_credential'
   PRESENT_PROOF = 'present_proof'
   PROBLEM_REPORT = 'problem_report'
+  OOB_INVITATION = 'oob_invitation'
