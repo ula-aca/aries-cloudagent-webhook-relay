@@ -126,13 +126,12 @@ async def present_proofs_handler(request):
   return web.Response(status=200)
 
 
-<<<<<<< HEAD
 @routes.post('/topic/problem_report')
 async def problem_report_handler(request):
   logging.debug('received problem report event')
   msg = Message(Topic.PROBLEM_REPORT, await request.json())
   await request.msg_queue.put(msg)
-=======
+
 
 @routes.post('/topic/oob_invitation/')
 async def present_proofs_handler(request):

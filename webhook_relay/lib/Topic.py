@@ -17,8 +17,5 @@ class Topic:
   BASICMESSAGES = 'basicmessages'
   ISSUE_CREDENTIAL = 'issue_credential'
   PRESENT_PROOF = 'present_proof'
-<<<<<<< HEAD
   PROBLEM_REPORT = 'problem_report'
-=======
   OOB_INVITATION = 'oob_invitation'
->>>>>>> pr-002
