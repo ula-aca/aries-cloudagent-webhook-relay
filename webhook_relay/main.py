@@ -94,7 +94,7 @@ async def on_ws_connection(request):
   return ws
 
 
-@routes.post('/webhooks/topic/connections/')
+@routes.post('/topic/connections/')
 async def connections_handler(request):
   logging.debug('received connection event')
   msg = Message(Topic.CONNECTIONS, await request.json())
@@ -102,7 +102,7 @@ async def connections_handler(request):
   return web.Response(status=200)
 
 
-@routes.post('/webhooks/topic/basicmessages/')
+@routes.post('/topic/basicmessages/')
 async def basicmessages_handler(request):
   logging.debug('received basic-message event')
   msg = Message(Topic.BASICMESSAGES, await request.json())
@@ -110,7 +110,7 @@ async def basicmessages_handler(request):
   return web.Response(status=200)
 
 
-@routes.post('/webhooks/topic/issue_credential/')
+@routes.post('/topic/issue_credential/')
 async def issue_credential_handler(request):
   logging.debug('received issue-credential event')
   msg = Message(Topic.ISSUE_CREDENTIAL, await request.json())
@@ -118,7 +118,7 @@ async def issue_credential_handler(request):
   return web.Response(status=200)
 
 
-@routes.post('/webhooks/topic/present_proof/')
+@routes.post('/topic/present_proof/')
 async def present_proofs_handler(request):
   logging.debug('received present-proof event')
   msg = Message(Topic.PRESENT_PROOF, await request.json())
@@ -126,7 +126,7 @@ async def present_proofs_handler(request):
   return web.Response(status=200)
 
 
-@routes.post('/webhooks/topic/problem_report')
+@routes.post('/topic/problem_report')
 async def problem_report_handler(request):
   logging.debug('received problem report event')
   msg = Message(Topic.PROBLEM_REPORT, await request.json())
@@ -134,7 +134,7 @@ async def problem_report_handler(request):
   return web.Response(status=200)
 
 
-@routes.post('/webhooks/topic/oob_invitation/')
+@routes.post('/topic/oob_invitation/')
 async def present_proofs_handler(request):
   logging.debug('received oob-invitation event')
   msg = Message(Topic.OOB_INVITATION, await request.json())

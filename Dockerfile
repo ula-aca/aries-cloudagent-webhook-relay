@@ -4,6 +4,6 @@ COPY . app
 
 RUN cd app && pip install .
 
-EXPOSE 8022
+EXPOSE 8080
 ENTRYPOINT [ "webhook-relay" ]
 CMD [] 
